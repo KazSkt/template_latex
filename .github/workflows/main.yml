@@ -1,0 +1,40 @@
+name: Publish PDF
+
+on:
+  push:
+    tags: v*.*.*
+
+env:
+  SOURCE_FOLDER_PATH: ./
+  FILE_NAME: paper.tex
+  GDRIVE_FOLDER_ID: 1jj7-xSsdAsXbXZP7n4DEJ_VRVk7nRzN-
+  SLACK_CHANNEL: template-latex # example: times_yamato
+  EMAIL_ADDRESS: yamato@iplab.cs.tsukuba.ac.jp
+  ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+jobs:
+  build:
+    name: Build 
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Git repository
+        uses: actions/checkout@v2
+
+      - name: Compile
+        run: ./.github/workflows/compile.sh
+          
+      - name: Create new Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: ./.github/workflows/gh_release.sh
+
+      - name: Upload to Google Drive
+        env:
+          CLIENT_ID: ${{ secrets.UBI_GOOGLE_CLIENT_ID }}
+          CLIENT_SECRET: ${{ secrets.UBI_GOOGLE_CLIENT_SECRET }}
+          REFRESH_TOKEN: ${{ secrets.UBI_GOOGLE_REFRESH_TOKEN }}
+        run: ./.github/workflows/gd_upload.sh
+
+      - name: Notify to Slack
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.LATEX_SLACK_WEBHOOK_URL }}
+        run: ./.github/workflows/notify_slack.sh
