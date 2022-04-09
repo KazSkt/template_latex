@@ -5,6 +5,8 @@ on:
     tags:
       - "v*.*.*"
 
+env:
+  FILE_NAME: paper.tex
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -14,3 +16,8 @@ jobs:
 
       - name: Compile
         run: ./.github/workflows/compile.sh
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: src/${{env.FILE_NAME}}
