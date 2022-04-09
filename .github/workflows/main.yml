@@ -22,3 +22,4 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: src/${{env.PDF_NAME}}
+          generate_release_notes: true
