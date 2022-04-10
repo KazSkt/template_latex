@@ -18,10 +18,10 @@ jobs:
       - name: Compile
         uses: ./latex-action
         with:
-          LATEX_FILE_NAME: ${env.TEX_NAME}.tex
+          LATEX_FILE_NAME: ${{env.TEX_NAME}}.tex
 
       - name: Rename
-        run: cd src && echo "PDF_NAME=${{env.TEX_NAME}}-${{GITHUB_REF:10}}" >> $GITHUB_ENV && mv ${{env.TEX_NAME}}.tex ${{env.PDF_NAME}}.pdf
+        run: cd src && echo "PDF_NAME=${{env.TEX_NAME}}-${GITHUB_REF:10}" >> $GITHUB_ENV && mv ${{env.TEX_NAME}}.tex ${{env.PDF_NAME}}.pdf
 
       - name: Release
         uses: softprops/action-gh-release@v1
