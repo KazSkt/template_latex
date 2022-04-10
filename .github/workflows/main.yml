@@ -6,8 +6,8 @@ on:
       - "v*.*.*"
 
 env:
-  FILE_NAME: paper.tex
-  ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+  TEX_NAME: paper
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -18,10 +18,13 @@ jobs:
       - name: Compile
         uses: ./latex-action
         with:
-          LATEX_FILE_NAME: "paper.tex"
+          LATEX_FILE_NAME: ${{env.TEX_NAME}}.tex
 
-      # - name: Release
-      #   uses: softprops/action-gh-release@v1
-      #   with:
-      #     files: src/${{env.PDF_NAME}}
-      #     generate_release_notes: true
+      - name: Rename
+        run: cd src && echo "PDF_NAME=${{env.TEX_NAME}}-${{GITHUB_REF:10}}" >> $GITHUB_ENV && mv ${{env.TEX_NAME}}.tex ${{env.PDF_NAME}}.pdf
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: src/${{env.PDF_NAME}}.pdf
+          generate_release_notes: true
