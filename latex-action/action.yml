@@ -1,0 +1,13 @@
+name: "latex action"
+author: "KazSkt"
+description: "Compile latex"
+
+inputs:
+  LATEX_FILE_NAME:
+    description: "Compile tex file"
+    required: "true"
+    default: "paper.tex"
+
+runs:
+  using: "docker"
+  image: "Dockerfile"
