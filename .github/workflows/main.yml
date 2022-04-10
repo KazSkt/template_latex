@@ -16,10 +16,12 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Compile
-        run: ./.github/workflows/compile.sh
-
-      - name: Release
-        uses: softprops/action-gh-release@v1
+        uses: ./latex-action
         with:
-          files: src/${{env.PDF_NAME}}
-          generate_release_notes: true
+          LATEX_FILE_NAME: "paper.tex"
+
+      # - name: Release
+      #   uses: softprops/action-gh-release@v1
+      #   with:
+      #     files: src/${{env.PDF_NAME}}
+      #     generate_release_notes: true
